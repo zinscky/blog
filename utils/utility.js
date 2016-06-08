@@ -1,4 +1,4 @@
-module.exports.sendResponse = function(res, status, success, payload, errors) {
+module.exports.sendJsonResponse = function(res, status, success, payload, errors) {
   res.status(status).json({
     success: success,
     payload: payload,

@@ -20,18 +20,25 @@ router.post("/", require("./auth"), function(req, res) {
 
   Article.createNewArticle(newArticle, function(err, article) {
     if(err) throw err;
-    utils.sendResponse(res, 201, true, article, null);
+    utils.sendJsonResponse(res, 201, true, article, null);
   });
 });
 
 //==============================================================================
 // Get all Articles
-// GET - api/v1/articles
+// GET - api/v1/articles?page={}&limit={}
+// page = page number
+// limit = number of articles per page
 //==============================================================================
 router.get("/", function(req, res) {
-  Article.getAllArticles(function(err, articles) {
+  
+  var page = req.query.page || 0;
+  var limit = req.query.limit || 10;
+  
+  
+  Article.getAllArticles(page, limit, function(err, articles) {
     if(err) throw err;
-    utils.sendResponse(res, 200, true, articles, null);
+    utils.sendJsonResponse(res, 200, true, articles, null);
   });
 });
 

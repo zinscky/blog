@@ -85,16 +85,16 @@ module.exports.validateUser = function(newUser, confirmPassword) {
   ** Check Confirm Password
   ** Confirm Password not defined or passed
   */
-  if(confirmPassword) {
+  if(!confirmPassword) {
     errors.push({
       field: "confirmPassword",
-      message: messages.validationErrors.password.unmacthed
+      message: messages.validationErrors.password.unmatched
     });
   }
   else {
     /**
     ** Check Confirm Password
-    ** If it matched with the password
+    ** If it matches with the password
     */
     if(confirmPassword !== newUser.password) {
       errors.push({

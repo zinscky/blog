@@ -23,6 +23,8 @@ router.post("/", function(req, res) {
         };
         var token = jwt.sign(payload, process.env.SECRET, {expiresIn: 1000*60*60*24});
 
+        res.cookie("access-token", token, {maxAge: 300000, httpOnly: true});
+        
         res.status(200).json({
           success: true,
           message: "You are successfully logged in.",

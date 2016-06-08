@@ -1,3 +1,5 @@
+"use strict";
+
 var express = require("express");
 var bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
@@ -8,6 +10,9 @@ var dotenv = require("dotenv");
 
 // DOTENV
 dotenv.config();
+
+// PORT
+var port = process.env.PORT || 3000;
 
 // Import API Modules
 var users = require("./routes/users");
@@ -41,6 +46,6 @@ app.use("/api/v1/articles", articles);
 //app.use("api/v1/register", register_api);
 
 // Start Listening
-app.listen(3000, function() {
+app.listen(port, function() {
   console.log("Server at: http://localhost:");
 });

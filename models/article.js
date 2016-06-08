@@ -25,16 +25,23 @@ module.exports.createNewArticle = function(newArticle, done) {
 
 // Get Article by ID
 module.exports.getArticleById = function(article_id, done) {
-  Article.findbyId(article_id, function(err, article) {
-    if(err) return done(err, false);
-    return done(false, article);
+  Article
+    .find({_id: article_id})
+    .populate("author")
+    .exec(function(err, article) {
+      if(err) return done(err, false);
+      return done(false, article);
   });
 };
 
 // Get all Articles
-module.exports.getAllArticles = function(done) {
+// page = page number
+// limit = number of articles to fetch for each page
+module.exports.getAllArticles = function(page, limit, done) {
   Article
     .find({})
+    .skip(page*limit)
+    .limit(limit)
     .populate("author")
     .exec(function(err, article) {
       if(err) return done(err, false);

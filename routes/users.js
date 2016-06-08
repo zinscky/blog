@@ -21,9 +21,6 @@ router.post("/", function(req, res) {
   newUser.name.last = req.body.lastname;
   newUser.email = req.body.email;
 
-  console.log("req.body\n");
-  console.log(req.body);
-
   var validationErrors = validator.validateUser(newUser, req.body.confirmPassword);
 
   if(validationErrors.length > 0) {
@@ -53,7 +50,7 @@ router.post("/", function(req, res) {
           errors: err
         });
       }
-    } else { // User creaeted sucessfully
+    } else { // User created sucessfully
       res.status(201);
       res.json({
         success: true,
@@ -64,37 +61,15 @@ router.post("/", function(req, res) {
   });
 });
 
-
-
-//==============================================================================
-// Middleware to authenticate token
-// Called before all api requests
-//==============================================================================
-function authenticateToken(req, res, next) {
-  var token = req.headers["x-access-token"];
-  if(token) {
-    jwt.verify(token, process.env.SECRET, function(err, decoded) {
-      if(err) {
-        return utils.sendResponse(res, 401, false, null, ["Malformed token"]);
-      }
-      req.token = decoded;
-      next();
-    });
-  }
-  else {
-    return utils.sendResponse(res, 401, false, null, ["No token"]);
-  }
-}
-
 //==============================================================================
 // Get All Users.
 // GET - api/v1/users
 //==============================================================================
-router.get("/", authenticateToken, function(req, res) {
+router.get("/", require("./auth"), function(req, res) {
   User.getAllUsers(function(err, users) {
     if(err) throw err;
     res.set("jwt", JSON.stringify(req.token));
-    utils.sendResponse(res, 200, true, users, null);
+    utils.sendJsonResponse(res, 200, true, users, null);
   });
 });
 
